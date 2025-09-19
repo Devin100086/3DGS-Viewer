@@ -309,12 +309,12 @@ class WebUI:
             TitlebarButton(
                 text="Getting Started",
                 icon=None,
-                href="https://github.com/Devin100086/3DGS_Viewer/blob/master/docs/webui.md",
+                href="https://github.com/Devin100086/3DGS-Viewer/blob/main/README.md",
             ),
             TitlebarButton(
                 text="Github",
                 icon="GitHub",
-                href="https://github.com/Devin100086/3DGS_Viewer",
+                href="https://github.com/Devin100086/3DGS-Viewer",
             ),
             TitlebarButton(
                 text="Devin",
