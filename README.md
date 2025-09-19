@@ -11,6 +11,8 @@ It is a simple 3DGS viewer based on viser. You can view a 3DGS model through a w
 To install, you can use the following command:
 ```
 pip install -r requirements.txt
+pip install -e submodules/diff-gaussian-rasterization
+pip install -e submodules/simple-knn
 ```
 
 ## ⚡Run
