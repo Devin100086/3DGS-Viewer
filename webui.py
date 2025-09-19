@@ -323,7 +323,7 @@ class WebUI:
             ),
         )
         image = TitlebarImage(
-            image_url_light="https://raw.githubusercontent.com/Devin100086/3DGS-Viewer/refs/heads/main/assert/logo.png",
+            image_url_light="https://raw.githubusercontent.com/Devin100086/3DGS-Viewer/refs/heads/main/assets/logo.png",
             image_alt="3DGS Viewer Logo",
             href="https://github.com/Devin100086/3DGS-Viewer/",
         )

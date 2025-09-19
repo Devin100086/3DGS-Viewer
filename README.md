@@ -1,4 +1,9 @@
-<h1 align="center">3DGS-Viewer</h1>
+<div align="center">
+    <h1>3DGS-Viewer</h1>
+    ![Teaser image](assets/demo.png)
+</div>
+
+
 It is a simple 3DGS viewer based on Viser
 
 ## Run
