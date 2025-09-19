@@ -1,18 +1,24 @@
 <div align="center">
-    <h1>3DGS-Viewer</h1>
+<h1>3DGS-Viewer</h1>
     
-    ![Teaser image](assets/demo.png)
+![Teaser image](assets/demo.png)
 </div>
 
+## 😋Introduction
+It is a simple 3DGS viewer based on viser. You can view a 3DGS model through a web browser without relying on a GUI.
 
-It is a simple 3DGS viewer based on Viser
+## 🔨Installation
+To install, you can use the following command:
+```
+pip install -r requirements.txt
+```
 
-## Run
+## ⚡Run
 To use the viewer, you can use the following command:
 ```
 python webui.py --gs_source "<YOUR PATH>" --colmap_dir "<YOUR PATH>"
 ```
 
-## Acknowledgements
+## 😘Acknowledgements
 
 This project is built upon [3D Gaussian Splatting](https://github.com/graphdeco-inria/gaussian-splatting) and [GaussianEditor](https://github.com/buaacyw/GaussianEditor). We want to thank the authors for their contributions.
