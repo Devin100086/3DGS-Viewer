@@ -73,7 +73,7 @@ class WebUI:
         self.draw_flag = True
         with self.server.add_gui_folder("Render Setting"):
             self.resolution_slider = self.server.add_gui_slider(
-                "Resolution", min=384, max=4096, step=2, initial_value=2048
+                "Resolution", min=384, max=4096, step=2, initial_value=768
             )
 
             self.FoV_slider = self.server.add_gui_slider(
