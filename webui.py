@@ -325,7 +325,7 @@ class WebUI:
         image = TitlebarImage(
             image_url_light="https://raw.githubusercontent.com/Devin100086/3DGS-Viewer/refs/heads/main/assert/logo.png",
             image_alt="3DGS Viewer Logo",
-            href="https://github.com/Devin100086/3DGS_Viewer/",
+            href="https://github.com/Devin100086/3DGS-Viewer/",
         )
         titlebar_theme = TitlebarConfig(buttons=buttons, image=image)
         brand_color = self.server.add_gui_rgb("Brand color", (7, 0, 8), visible=False)
