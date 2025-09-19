@@ -1,5 +1,6 @@
 <div align="center">
     <h1>3DGS-Viewer</h1>
+    
     ![Teaser image](assets/demo.png)
 </div>
 
