@@ -317,13 +317,13 @@ class WebUI:
                 href="https://github.com/Devin100086/3DGS_Viewer",
             ),
             TitlebarButton(
-                text="Cunqi Wu",
+                text="Devin",
                 icon=None,
-                href="https://Devin100086.github.io/",
+                href="https://github.com/Devin100086",
             ),
         )
         image = TitlebarImage(
-            image_url_light="assets/logo.png",
+            image_url_light="https://raw.githubusercontent.com/Devin100086/3DGS_Viewer/refs/heads/main/assert/logo.png",
             image_alt="3DGS Viewer Logo",
             href="https://github.com/Devin100086/3DGS_Viewer/",
         )
