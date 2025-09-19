@@ -13,6 +13,7 @@ To install, you can use the following command:
 pip install -r requirements.txt
 pip install -e submodules/diff-gaussian-rasterization
 pip install -e submodules/simple-knn
+pip install -e submodules/fused-ssim
 ```
 
 ## ⚡Run
