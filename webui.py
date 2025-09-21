@@ -51,7 +51,7 @@ class WebUI:
         self.colmap_cameras = None
         self.render_cameras = None
 
-        if self.colmap_dir is not None:
+        if self.colmap_dir is not None and self.colmap_dir != "":
             scene = CamScene(self.colmap_dir, h=512, w=512)
             self.cameras_extent = scene.cameras_extent
             self.colmap_cameras = scene.cameras
@@ -104,12 +104,13 @@ class WebUI:
         with torch.no_grad():
             self.frames = []
             random.seed(0)
-            frame_index = random.sample(
-                range(0, len(self.colmap_cameras)),
-                min(len(self.colmap_cameras), 20),
-            )
-            for i in frame_index:
-                self.make_one_camera_pose_frame(i)
+            if self.colmap_cameras is not None:
+                frame_index = random.sample(
+                    range(0, len(self.colmap_cameras)),
+                    min(len(self.colmap_cameras), 20),
+                )
+                for i in frame_index:
+                    self.make_one_camera_pose_frame(i)
 
         @self.frame_show.on_update
         def _(_):
@@ -244,7 +245,7 @@ class WebUI:
     def camera(self):
         if len(list(self.server.get_clients().values())) == 0:
             return None
-        if self.render_cameras is None and self.colmap_dir is not None:
+        if self.render_cameras is None and self.colmap_dir is not None and self.colmap_dir != "":
             self.aspect = list(self.server.get_clients().values())[0].camera.aspect
             self.render_cameras = CamScene(
                 self.colmap_dir, h=-1, w=-1, aspect=self.aspect
@@ -261,6 +262,7 @@ class WebUI:
         else:
             fovy = self.render_cameras[0].FoVy * self.FoV_slider.value
 
+        self.aspect = list(self.server.get_clients().values())[0].camera.aspect
         fovx = 2 * math.atan(math.tan(fovy / 2) * self.aspect)
         # fovy = self.render_cameras[0].FoVy
         # fovx = self.render_cameras[0].FoVx
@@ -340,7 +342,7 @@ class WebUI:
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--gs_source", type=str, required=True)  # gs ply or obj file?
-    parser.add_argument("--colmap_dir", type=str, required=True)  #
+    parser.add_argument("--colmap_dir", type=str, required=False, default="")  #
 
     args = parser.parse_args()
     webui = WebUI(args)
