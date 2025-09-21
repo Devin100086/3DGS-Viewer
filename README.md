@@ -5,10 +5,7 @@
 </div>
 
 ## 😋Introduction
-It is a simple 3DGS viewer based on viser. You can view a 3DGS model through a web browser without relying on a GUI.
-<video controls>
-    <source src="assets/demo.mp4" type="video/mp4">
-</video>
+It is a simple 3DGS viewer based on viser. You can view a 3DGS model through a web browser without relying on a GUI. You can see the video in the ```assets/demo.mp4```.
 
 ## 🔨Installation
 To install, you can use the following command:
