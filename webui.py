@@ -15,7 +15,6 @@ from omegaconf import OmegaConf
 
 from gaussian_renderer import render
 from scene import GaussianModel
-from scene.camera_scene import CamScene
 
 from arguments import (
     PipelineParams,
@@ -51,7 +50,8 @@ class WebUI:
         self.colmap_cameras = None
         self.render_cameras = None
 
-        if self.colmap_dir is not None and self.colmap_dir != "":
+        if self.colmap_dir != "":
+            from scene.camera_scene import CamScene
             scene = CamScene(self.colmap_dir, h=512, w=512)
             self.cameras_extent = scene.cameras_extent
             self.colmap_cameras = scene.cameras
@@ -245,7 +245,7 @@ class WebUI:
     def camera(self):
         if len(list(self.server.get_clients().values())) == 0:
             return None
-        if self.render_cameras is None and self.colmap_dir is not None and self.colmap_dir != "":
+        if self.render_cameras is None and self.colmap_dir != "":
             self.aspect = list(self.server.get_clients().values())[0].camera.aspect
             self.render_cameras = CamScene(
                 self.colmap_dir, h=-1, w=-1, aspect=self.aspect
