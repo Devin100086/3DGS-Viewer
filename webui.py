@@ -27,7 +27,6 @@ import math
 
 import os
 import random
-import ui_utils
 
 import datetime
 from pathlib import Path
@@ -73,7 +72,7 @@ class WebUI:
         self.draw_flag = True
         with self.server.add_gui_folder("Render Setting"):
             self.resolution_slider = self.server.add_gui_slider(
-                "Resolution", min=384, max=4096, step=2, initial_value=768
+                "Resolution", min=384, max=4096, step=2, initial_value=512
             )
 
             self.FoV_slider = self.server.add_gui_slider(
