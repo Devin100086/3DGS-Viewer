@@ -227,7 +227,7 @@ class WebUI:
             self.viewspace_point_tensor = viewspace_point_tensor
             self.radii = radii
             self.visibility_filter = self.radii > 0.0
-
+        
         image = image.permute(1, 2, 0)[None]  # C H W to 1 H W C
         render_pkg["comp_rgb"] = image  # 1 H W C
 
