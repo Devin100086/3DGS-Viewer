@@ -1,7 +1,132 @@
 <style>
-    body {
-        margin: 0;
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  #loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(30, 30, 50, 0.95), rgba(10, 10, 30, 0.95));
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px 60px;
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.3),
+      0 0 30px rgba(100, 200, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  #loading-text {
+    font-size: 32px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #64b5f6, #42a5f5, #2196f3, #1e88e5, #1976d2);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientFlow 3s ease-in-out infinite, textGlow 2s ease-in-out infinite alternate;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(33, 150, 243, 0.5);
+  }
+
+  #loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid #2196f3;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.3);
+  }
+
+  #loading-dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(45deg, #64b5f6, #2196f3);
+    border-radius: 50%;
+    animation: dotPulse 1.5s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+  }
+
+  .dot:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  .dot:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .dot:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  #loading.hidden {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+    transition: all 0.5s ease-out;
+    pointer-events: none;
+  }
+
+  @keyframes gradientFlow {
+
+    0%,
+    100% {
+      background-position: 0% 50%;
     }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes textGlow {
+    0% {
+      text-shadow: 0 0 20px rgba(33, 150, 243, 0.5);
+    }
+
+    100% {
+      text-shadow: 0 0 30px rgba(33, 150, 243, 0.8), 0 0 40px rgba(33, 150, 243, 0.4);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes dotPulse {
+
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+  }
 </style>
 <script type="importmap">
   {
@@ -13,34 +138,79 @@
   }
 </script>
 <script type="module">
-    import * as THREE from "three";
-    import { SparkControls, SplatMesh } from "@sparkjsdev/spark";
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+  import * as THREE from "three";
+  import { SparkControls, SplatMesh, FpsMovement } from "@sparkjsdev/spark";
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement)
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
 
-    const splatURL = "./point_cloud.ply";
-    const butterfly = new SplatMesh({ url: splatURL });
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.target.set(0, 0, 0);
-    controls.minDistance = 0.3;
-    controls.maxDistance = 20;
+  // Create loading element with enhanced design
+  const loadingElement = document.createElement('div');
+  loadingElement.id = 'loading';
+  loadingElement.innerHTML = `
+    <div id="loading-text">LOADING 3DGS</div>
+    <div id="loading-spinner"></div>
+    <div id="loading-dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  `;
+  document.body.appendChild(loadingElement);
+
+
+  // replace with your own .ply file path
+  const splatURL = "./point_cloud.ply";
+
+  const butterfly = new SplatMesh({ url: splatURL, 'progressiveLoad': false });
+  console.log('Initialization status:', butterfly.isInitialized);
+
+  // Function to monitor butterfly.isInitialized status changes
+  function checkInitializationStatus() {
+    if (butterfly.isInitialized) {
+      console.log('Butterfly initialization completed');
+      loadingElement.classList.add('hidden');
+    } else {
+      console.log('Butterfly is initializing...');
+      loadingElement.classList.remove('hidden');
+    }
+  }
+
+  // Check status immediately once
+  checkInitializationStatus();
+
+  // Periodically check initialization status
+  const statusCheckInterval = setInterval(() => {
+    checkInitializationStatus();
+    if (butterfly.isInitialized) {
+      clearInterval(statusCheckInterval);
+    }
+  }, 100); // Check every 100ms
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.25;
+  controls.listenToKeyEvents(window);
+  controls.keyPanSpeed = 20.0;
+  controls.target.set(0, 0, 0);
+  controls.minDistance = 0.3;
+  controls.maxDistance = 20;
+  controls.update();
+
+  butterfly.quaternion.set(1, 0, 0, 0);
+  butterfly.position.set(0, 0, -3);
+  scene.add(butterfly);
+  console.log(butterfly);
+  console.log(butterfly.isInitialized);
+
+  renderer.setAnimationLoop(function animate(time) {
     controls.update();
-
-    butterfly.quaternion.set(1, 0, 0, 0);
-    butterfly.position.set(0, 0, -3);
-    scene.add(butterfly);
-    console.log(butterfly);
-
-    renderer.setAnimationLoop(function animate(time) {
-        controls.update();
-        renderer.render(scene, camera);
-        // butterfly.rotation.y += 0.01;
-    });
+    renderer.render(scene, camera);
+    // butterfly.rotation.y += 0.01;
+  });
 
 
 </script>
